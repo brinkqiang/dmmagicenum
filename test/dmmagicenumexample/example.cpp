@@ -22,94 +22,117 @@
 
 #include <iostream>
 
-#include <magic_enum.hpp>
+#include "dmmagicenum.h"
 
 enum class Color : int { RED = -10, BLUE = 0, GREEN = 10 };
 
 template <typename E>
-auto to_integer(magic_enum::Enum<E> value) {
-  // magic_enum::Enum<E> - C++17 Concept for enum type.
-  return static_cast<magic_enum::underlying_type_t<E>>(value);
+auto to_integer(magic_enum::Enum<E> value)
+{
+    // magic_enum::Enum<E> - C++17 Concept for enum type.
+    return static_cast<magic_enum::underlying_type_t<E>>(value);
 }
 
-int main() {
-  // Enum variable to string name.
-  Color c1 = Color::RED;
-  auto c1_name = magic_enum::enum_name(c1);
-  std::cout << c1_name << std::endl; // RED
+int main()
+{
+    // Enum variable to string name.
+    Color c1 = Color::RED;
+    auto c1_name = magic_enum::enum_name(c1);
+    std::cout << c1_name << std::endl; // RED
 
-  // String enum name sequence.
-  constexpr auto color_names = magic_enum::enum_names<Color>();
-  std::cout << "Color names:";
-  for (auto n : color_names) {
-    std::cout << " " << n;
-  }
-  std::cout << std::endl;
-  // Color names: RED BLUE GREEN
+    // String enum name sequence.
+    constexpr auto color_names = magic_enum::enum_names<Color>();
+    std::cout << "Color names:";
 
-  // String name to enum value.
-  auto c2 = magic_enum::enum_cast<Color>("BLUE");
-  if (c2.has_value() && c2.value() == Color::BLUE) {
-    std::cout << "BLUE = " << to_integer(c2.value()) << std::endl; // BLUE = 0
-  }
+    for (auto n : color_names)
+    {
+        std::cout << " " << n;
+    }
 
-  // Integer value to enum value.
-  auto c3 = magic_enum::enum_cast<Color>(10);
-  if (c3.has_value() && c3.value() == Color::GREEN) {
-    std::cout << "GREEN = " << magic_enum::enum_integer(c3.value()) << std::endl; // GREEN = 10
-  }
+    std::cout << std::endl;
+    // Color names: RED BLUE GREEN
 
-  // Enum value to integer value.
-  auto color_integer = magic_enum::enum_integer(c1);
-  if (color_integer == to_integer(Color::RED)) {
-    std::cout << "RED = " << color_integer << std::endl; // RED = -10
-  }
+    // String name to enum value.
+    auto c2 = magic_enum::enum_cast<Color>("BLUE");
 
-  using namespace magic_enum::ostream_operators; // out-of-the-box ostream operator for all enums.
-  // ostream operator for enum.
-  std::cout << "Color: " << c1 << " " << c2 << " " << c3 << std::endl; // Color: RED BLUE GREEN
+    if (c2.has_value() && c2.value() == Color::BLUE)
+    {
+        std::cout << "BLUE = " << to_integer(c2.value()) << std::endl; // BLUE = 0
+    }
 
-  // Number of enum values.
-  std::cout << "Color enum size: " << magic_enum::enum_count<Color>() << std::endl; // Color enum size: 3
+    // Integer value to enum value.
+    auto c3 = magic_enum::enum_cast<Color>(10);
 
-  // Indexed access to enum value.
-  std::cout << "Color[0] = " << magic_enum::enum_value<Color>(0) << std::endl; // Color[0] = RED
+    if (c3.has_value() && c3.value() == Color::GREEN)
+    {
+        std::cout << "GREEN = " << magic_enum::enum_integer(c3.value()) <<
+                  std::endl; // GREEN = 10
+    }
 
-  // Enum value sequence.
-  constexpr auto colors = magic_enum::enum_values<Color>();
-  std::cout << "Colors sequence:";
-  for (Color c : colors) {
-    std::cout << " " << c; // ostream operator for enum.
-  }
-  std::cout << std::endl;
-  // Color sequence: RED BLUE GREEN
+    // Enum value to integer value.
+    auto color_integer = magic_enum::enum_integer(c1);
 
-  enum class Flags { A = 1, B = 2, C = 4, D = 8 };
-  using namespace magic_enum::bitwise_operators; // out-of-the-box bitwise operators for all enums.
-  // Support operators: ~, |, &, ^, |=, &=, ^=.
-  Flags flags = Flags::A | Flags::C;
-  std::cout << flags << std::endl;
+    if (color_integer == to_integer(Color::RED))
+    {
+        std::cout << "RED = " << color_integer << std::endl; // RED = -10
+    }
 
-  enum color { red, green, blue };
+    using namespace
+        magic_enum::ostream_operators; // out-of-the-box ostream operator for all enums.
+    // ostream operator for enum.
+    std::cout << "Color: " << c1 << " " << c2 << " " << c3 <<
+              std::endl; // Color: RED BLUE GREEN
 
-  // Checks whether type is an Unscoped enumeration.
-  static_assert(magic_enum::is_unscoped_enum_v<color>);
-  static_assert(!magic_enum::is_unscoped_enum_v<Color>);
-  static_assert(!magic_enum::is_unscoped_enum_v<Flags>);
+    // Number of enum values.
+    std::cout << "Color enum size: " << magic_enum::enum_count<Color>() <<
+              std::endl; // Color enum size: 3
 
-  // Checks whether type is an Scoped enumeration.
-  static_assert(!magic_enum::is_scoped_enum_v<color>);
-  static_assert(magic_enum::is_scoped_enum_v<Color>);
-  static_assert(magic_enum::is_scoped_enum_v<Flags>);
+    // Indexed access to enum value.
+    std::cout << "Color[0] = " << magic_enum::enum_value<Color>
+              (0) << std::endl; // Color[0] = RED
 
-  // Enum pair (value enum, string enum name) sequence.
-  constexpr auto color_entries = magic_enum::enum_entries<Color>();
-  std::cout << "Colors entries:";
-  for (auto e : color_entries) {
-    std::cout << " "  << e.second << " = " << static_cast<int>(e.first);
-  }
-  std::cout << std::endl;
-  // Color entries: RED = -10 BLUE = 0 GREEN = 10
+    // Enum value sequence.
+    constexpr auto colors = magic_enum::enum_values<Color>();
+    std::cout << "Colors sequence:";
 
-  return 0;
+    for (Color c : colors)
+    {
+        std::cout << " " << c; // ostream operator for enum.
+    }
+
+    std::cout << std::endl;
+    // Color sequence: RED BLUE GREEN
+
+    enum class Flags { A = 1, B = 2, C = 4, D = 8 };
+    using namespace
+        magic_enum::bitwise_operators; // out-of-the-box bitwise operators for all enums.
+    // Support operators: ~, |, &, ^, |=, &=, ^=.
+    Flags flags = Flags::A | Flags::C;
+    std::cout << flags << std::endl;
+
+    enum color { red, green, blue };
+
+    // Checks whether type is an Unscoped enumeration.
+    static_assert(magic_enum::is_unscoped_enum_v<color>);
+    static_assert(!magic_enum::is_unscoped_enum_v<Color>);
+    static_assert(!magic_enum::is_unscoped_enum_v<Flags>);
+
+    // Checks whether type is an Scoped enumeration.
+    static_assert(!magic_enum::is_scoped_enum_v<color>);
+    static_assert(magic_enum::is_scoped_enum_v<Color>);
+    static_assert(magic_enum::is_scoped_enum_v<Flags>);
+
+    // Enum pair (value enum, string enum name) sequence.
+    constexpr auto color_entries = magic_enum::enum_entries<Color>();
+    std::cout << "Colors entries:";
+
+    for (auto e : color_entries)
+    {
+        std::cout << " "  << e.second << " = " << static_cast<int>(e.first);
+    }
+
+    std::cout << std::endl;
+    // Color entries: RED = -10 BLUE = 0 GREEN = 10
+
+    return 0;
 }
