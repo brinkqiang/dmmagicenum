@@ -26,6 +26,5 @@ dmmagicenum
 ```cpp
 ```
 ## Contacts
-[![Join the chat](https://badges.gitter.im/brinkqiang/dmmagicenum/Lobby.svg)](https://gitter.im/brinkqiang/dmmagicenum)
 
 ## Thanks
